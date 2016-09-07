@@ -2,11 +2,33 @@
 let Tabs = React.createClass({
   getInitialState: function(){
   	return {
-  	  currentIndex: 0
+  	  currentIndex: 0,
+      data: []
   	}
   },
-  getTitle: function(index){
-  	return index === this.state.currentIndex ? "tab-title-item active" : "tab-title-item";
+  // 只调用一次，返回对象用于设置默认的props
+  getDefaultProps: function(){
+    return {
+      props: 1
+    }
+  },
+  getInfo: function(index){
+    var me = this;
+    console.log(index);
+    // http://localhost:3000/app/json/index.json
+    /*
+    $.ajax({
+      url: 'http://localhost:3000/app/json/index.json',
+      type: 'get',
+      dataType: 'json',
+      success: function(d){
+        me.setState({
+          'data': d
+        });
+      }
+    })
+    */
+  	//return index === this.state.currentIndex ? "tab-title-item active" : "tab-title-item";
   },
   getContent: function(index) {
   	return index === this.state.currentIndex ? "tab-content-item active" : 
@@ -14,18 +36,19 @@ let Tabs = React.createClass({
   },
   render: function(){
   	let me = this;
+    console.log(this.props);
   	return(
   	  <div>
   	    <nav className="tab-title-items">
   	      {React.Children.map(me.props.children,(element,index) =>{
-  	      	return(<div onClick={() => {this.setState({currentIndex:index})}} className={me.getTitle(index)}>
+  	      	return(<div className={me.state.currentIndex === index ? "tab-title-item active" : "tab-title-item"}>
   	      		  {element.props.name2}
   	      		</div>)
   	      })}
   	    </nav>
   	    <div className="tab-content-items">
- 		  {React.Children.map(me.props.children,(element,index) => {
- 		  	return (<div className={me.getContent(index)}>{element}</div>)
+ 		  {React.Children.map(me.state.catalogs,(element,index) => {
+ 		  	return (<div className={me.getContent(index)}>{element.description}</div>)
  		  })}
   	    </div>
   	  </div>
